@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:voice_call_sample/voice.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -60,8 +62,21 @@ class _VoiceHomeState extends State<VoiceHome> {
                 ),
               ),
               RaisedButton(
-                onPressed: () {
-                  print(callCode.text);
+                onPressed: () async {
+                  if (callCode.text != '' || callCode.text != null) {
+                    await PermissionHandler().requestPermissions(
+                      [PermissionGroup.camera, PermissionGroup.microphone],
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VoiceCall(
+                          channel: callCode.text,
+                        ),
+                      ),
+                    );
+                  }
                 },
                 child: Text("Join Call"),
               )
